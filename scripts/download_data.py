@@ -54,3 +54,4 @@ def download_lgg_dataset(target_dir: str = "data"):
 if __name__ == "__main__":
     dest = sys.argv[1] if len(sys.argv) > 1 else "data"
     download_lgg_dataset(dest)
+

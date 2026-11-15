@@ -231,6 +231,18 @@ Evaluate the optimal checkpoint on reserved, patient-isolated test subjects:
 python src/evaluate.py --output_dir outputs --num_samples 5
 ```
 
+### Single Slice Prediction
+Segment any individual MRI slice and generate an overlay comparison:
+```bash
+python src/predict.py --image path/to/mri_slice.tif --model checkpoints/best_unet_lgg.keras --output outputs/prediction.png
+```
+
+### Running Unit Tests
+Verify patient isolation guarantees, metric formulations, and model shapes:
+```bash
+python -m unittest discover -s tests -p "test_*.py"
+```
+
 ### Interactive Notebook
 Launch the comprehensive Jupyter Notebook to explore data distribution, step-by-step layer transformations, and inline visual inference:
 ```bash
