@@ -1,0 +1,33 @@
+# Configuration for LGG MRI Brain Tumor Segmentation
+data_dir: "data/kaggle_3m"
+checkpoint_dir: "checkpoints"
+output_dir: "outputs"
+best_model_name: "best_unet_lgg.keras"
+training_log_name: "training_history.csv"
+evaluation_results_name: "test_metrics.json"
+
+image_height: 256
+image_width: 256
+num_channels: 3
+num_classes: 1
+
+train_ratio: 0.70
+val_ratio: 0.15
+test_ratio: 0.15
+random_seed: 42
+
+batch_size: 16
+initial_learning_rate: 0.0001
+min_learning_rate: 0.0000001
+epochs: 50
+patience_early_stopping: 12
+patience_reduce_lr: 5
+reduce_lr_factor: 0.5
+
+bce_weight: 1.0
+dice_weight: 1.0
+smooth_factor: 0.000001
+
+prediction_threshold: 0.5
+num_visual_samples: 5
+
