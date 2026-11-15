@@ -7,6 +7,8 @@ Strict patient-level splitting to avoid spatial/anatomical data leakage between
 training, validation, and test sets.
 """
 
+from __future__ import annotations
+
 import os
 import re
 import glob
@@ -340,6 +342,8 @@ def create_tf_dataset(
     shuffle: bool = True
 ) -> tf.data.Dataset:
     """Creates a high-performance tf.data.Dataset pipeline with prefetching."""
+    if tf is None:
+        raise ImportError("TensorFlow is required for create_tf_dataset. Please run `pip install -r requirements.txt`.")
 
     image_paths = df["image_path"].values.tolist()
     mask_paths = df["mask_path"].values.tolist()

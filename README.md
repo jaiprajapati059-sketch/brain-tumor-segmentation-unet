@@ -124,6 +124,9 @@ $$\mathcal{L}_{\text{Combined}} = \alpha \cdot \mathcal{L}_{\text{BCE}}(Y, \hat{
 
 ```
 Brain Tumor/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                # Automated GitHub Actions test pipeline
 ├── configs/
 │   └── config.yaml               # Centralized hyperparameters & directory paths
 ├── data/
@@ -140,6 +143,8 @@ Brain Tumor/
 │   ├── train_split.csv           # Patient-isolated train partition metadata
 │   ├── val_split.csv             # Validation partition metadata
 │   └── test_split.csv            # Test partition metadata
+├── scripts/
+│   └── download_data.py          # Automated dataset downloader via Kaggle API
 ├── src/
 │   ├── __init__.py
 │   ├── config.py                 # Configuration dataclass & loaders
@@ -149,8 +154,14 @@ Brain Tumor/
 │   ├── metrics.py                # Dice coefficient, IoU, Precision, Recall
 │   ├── utils.py                  # Overlays, plotting & reproducibility seeds
 │   ├── train.py                  # Training pipeline CLI
-│   └── evaluate.py               # Test set quantitative & visual evaluation CLI
+│   ├── evaluate.py               # Test set quantitative & visual evaluation CLI
+│   └── predict.py                # Single-slice inference CLI
+├── tests/
+│   ├── test_dataset.py           # Patient splitting & leakage unit tests
+│   ├── test_losses_metrics.py    # Metric & loss formulation tests
+│   └── test_model.py             # U-Net architecture & shape tests
 ├── .gitignore
+├── LICENSE                       # MIT License
 ├── requirements.txt              # Production dependency specifications
 └── README.md
 ```

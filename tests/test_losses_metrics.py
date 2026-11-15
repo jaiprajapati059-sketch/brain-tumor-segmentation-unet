@@ -2,6 +2,10 @@
 Unit Tests for Custom Segmentation Metrics & Loss Functions
 """
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 import unittest
 import numpy as np
 

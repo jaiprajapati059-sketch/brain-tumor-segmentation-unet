@@ -2,6 +2,10 @@
 Unit Tests for Dataset Processing & Patient-Level Splitting
 """
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 import unittest
 import numpy as np
 import pandas as pd
