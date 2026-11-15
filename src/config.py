@@ -6,7 +6,7 @@ Brain Tumor Semantic Segmentation - LGG MRI Dataset (Buda et al.)
 from dataclasses import dataclass, asdict
 from pathlib import Path
 import os
-import yaml
+
 
 
 @dataclass
@@ -92,12 +92,20 @@ class Config:
         """Load configuration overrides from a YAML file."""
         if not os.path.exists(yaml_path):
             raise FileNotFoundError(f"Configuration file not found at: {yaml_path}")
+        try:
+            import yaml
+        except ImportError:
+            raise ImportError("PyYAML is required to read YAML configs. Please run `pip install pyyaml`.")
         with open(yaml_path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f) or {}
         return cls(**data)
 
     def save_yaml(self, yaml_path: str) -> None:
         """Save current configuration to a YAML file."""
+        try:
+            import yaml
+        except ImportError:
+            raise ImportError("PyYAML is required to save YAML configs. Please run `pip install pyyaml`.")
         os.makedirs(os.path.dirname(yaml_path), exist_ok=True)
         with open(yaml_path, "w", encoding="utf-8") as f:
             yaml.safe_dump(self.to_dict(), f, default_flow_style=False)

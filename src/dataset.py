@@ -15,9 +15,21 @@ from typing import Tuple, List, Dict, Optional, Generator
 
 import numpy as np
 import pandas as pd
-import cv2
-import tensorflow as tf
-from sklearn.model_selection import train_test_split
+
+try:
+    import cv2
+except ImportError:
+    cv2 = None
+
+try:
+    import tensorflow as tf
+except ImportError:
+    tf = None
+
+try:
+    from sklearn.model_selection import train_test_split
+except ImportError:
+    train_test_split = None
 
 
 def extract_patient_id(file_path: str) -> str:
@@ -270,7 +282,10 @@ def load_and_preprocess_sample(
     return image, mask
 
 
-class LGGSequence(tf.keras.utils.Sequence):
+_BaseSequence = tf.keras.utils.Sequence if (tf is not None and hasattr(tf, "keras") and hasattr(tf.keras.utils, "Sequence")) else object
+
+
+class LGGSequence(_BaseSequence):
     """Memory-efficient, multithread-safe Keras Sequence for batch generation."""
 
     def __init__(
@@ -281,6 +296,8 @@ class LGGSequence(tf.keras.utils.Sequence):
         augment: bool = False,
         shuffle: bool = True
     ):
+        if tf is None:
+            raise ImportError("TensorFlow is required for LGGSequence. Please run `pip install -r requirements.txt`.")
         self.df = df.reset_index(drop=True)
         self.batch_size = batch_size
         self.target_size = target_size

@@ -12,24 +12,27 @@ and Intersection over Union (IoU / Jaccard Index) evaluate true lesion boundary 
 
 from typing import Union
 import numpy as np
-import tensorflow as tf
+
+try:
+    import tensorflow as tf
+    _HAS_TF = True
+except ImportError:
+    tf = None
+    _HAS_TF = False
 
 
-@tf.keras.utils.register_keras_serializable(package="MedicalMetrics")
-def dice_coef(y_true: tf.Tensor, y_pred: tf.Tensor, smooth: float = 1e-6) -> tf.Tensor:
-    """Computes the Sørensen-Dice Similarity Coefficient for tensors.
+def _register_metric(fn):
+    """Safely register metric with Keras if TensorFlow is available."""
+    if _HAS_TF and hasattr(tf, "keras") and hasattr(tf.keras.utils, "register_keras_serializable"):
+        return tf.keras.utils.register_keras_serializable(package="MedicalMetrics")(fn)
+    return fn
 
-    Mathematical Formulation:
-        Dice = (2 * |X ∩ Y| + smooth) / (|X| + |Y| + smooth)
 
-    Args:
-        y_true: Ground truth binary tensor (values in {0, 1}).
-        y_pred: Predicted probability tensor (values in [0, 1]).
-        smooth: Smoothing epsilon preventing division by zero and stabilizing gradients.
-
-    Returns:
-        tf.Tensor: Scalar Dice coefficient in [0.0, 1.0].
-    """
+@_register_metric
+def dice_coef(y_true, y_pred, smooth: float = 1e-6):
+    """Computes the Sørensen-Dice Similarity Coefficient for tensors."""
+    if not _HAS_TF:
+        raise ImportError("TensorFlow is required for tensor metric calculations. Please run `pip install -r requirements.txt`.")
     y_true_f = tf.cast(tf.reshape(y_true, [-1]), tf.float32)
     y_pred_f = tf.cast(tf.reshape(y_pred, [-1]), tf.float32)
 
@@ -40,21 +43,11 @@ def dice_coef(y_true: tf.Tensor, y_pred: tf.Tensor, smooth: float = 1e-6) -> tf.
     return dice
 
 
-@tf.keras.utils.register_keras_serializable(package="MedicalMetrics")
-def iou_metric(y_true: tf.Tensor, y_pred: tf.Tensor, smooth: float = 1e-6) -> tf.Tensor:
-    """Computes the Intersection over Union (IoU / Jaccard Index) for tensors.
-
-    Mathematical Formulation:
-        IoU = |X ∩ Y| / |X ∪ Y| = (|X ∩ Y| + smooth) / (|X| + |Y| - |X ∩ Y| + smooth)
-
-    Args:
-        y_true: Ground truth binary tensor.
-        y_pred: Predicted probability tensor.
-        smooth: Epsilon smoothing constant.
-
-    Returns:
-        tf.Tensor: Scalar IoU score in [0.0, 1.0].
-    """
+@_register_metric
+def iou_metric(y_true, y_pred, smooth: float = 1e-6):
+    """Computes the Intersection over Union (IoU / Jaccard Index) for tensors."""
+    if not _HAS_TF:
+        raise ImportError("TensorFlow is required for tensor metric calculations.")
     y_true_f = tf.cast(tf.reshape(y_true, [-1]), tf.float32)
     y_pred_f = tf.cast(tf.reshape(y_pred, [-1]), tf.float32)
 
@@ -65,9 +58,11 @@ def iou_metric(y_true: tf.Tensor, y_pred: tf.Tensor, smooth: float = 1e-6) -> tf
     return iou
 
 
-@tf.keras.utils.register_keras_serializable(package="MedicalMetrics")
-def precision_metric(y_true: tf.Tensor, y_pred: tf.Tensor, smooth: float = 1e-6) -> tf.Tensor:
+@_register_metric
+def precision_metric(y_true, y_pred, smooth: float = 1e-6):
     """Computes Precision (Positive Predictive Value) for segmentation masks."""
+    if not _HAS_TF:
+        raise ImportError("TensorFlow is required for tensor metric calculations.")
     y_true_f = tf.cast(tf.reshape(y_true, [-1]), tf.float32)
     y_pred_f = tf.cast(tf.reshape(y_pred, [-1]), tf.float32)
 
@@ -77,9 +72,11 @@ def precision_metric(y_true: tf.Tensor, y_pred: tf.Tensor, smooth: float = 1e-6)
     return (true_positives + smooth) / (predicted_positives + smooth)
 
 
-@tf.keras.utils.register_keras_serializable(package="MedicalMetrics")
-def recall_metric(y_true: tf.Tensor, y_pred: tf.Tensor, smooth: float = 1e-6) -> tf.Tensor:
+@_register_metric
+def recall_metric(y_true, y_pred, smooth: float = 1e-6):
     """Computes Recall (Sensitivity) for segmentation masks."""
+    if not _HAS_TF:
+        raise ImportError("TensorFlow is required for tensor metric calculations.")
     y_true_f = tf.cast(tf.reshape(y_true, [-1]), tf.float32)
     y_pred_f = tf.cast(tf.reshape(y_pred, [-1]), tf.float32)
 
