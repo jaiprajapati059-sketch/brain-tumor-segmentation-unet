@@ -259,13 +259,11 @@ The evaluation pipeline produces a **1x3 clinical comparison panel** for represe
 - **Pane 3:** U-Net predicted segmentation overlaid in **Crimson Red** with slice-level Dice and IoU scores.
 
 ### Sample Qualitative Output
-<!-- PLACEHOLDER FOR VISUAL INFERENCE GRID -->
-![Test Visual Inference](outputs/test_visual_inference.png)
+![Test Visual Inference](https://raw.githubusercontent.com/jaiprajapati059-sketch/brain-tumor-segmentation-unet/main/outputs/test_visual_inference.png)
 *(Figure: Reserved test set predictions comparing raw MRI FLAIR scans, radiologist ground-truth masks, and U-Net predicted segmentations.)*
 
 ### Training & Validation Progression
-<!-- PLACEHOLDER FOR TRAINING CURVES -->
-![Training Curves](outputs/training_curves.png)
+![Training Curves](https://raw.githubusercontent.com/jaiprajapati059-sketch/brain-tumor-segmentation-unet/main/outputs/training_curves.png)
 *(Figure: Loss convergence and Dice similarity coefficient progression across training and validation epochs.)*
 
 ---
